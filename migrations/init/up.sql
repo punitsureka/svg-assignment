@@ -1,5 +1,7 @@
 CREATE DATABASE simple_viral_games;
 
+\c simple_viral_games;
+
 CREATE TABLE IF NOT EXISTS game (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
