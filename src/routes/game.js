@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { init } from '../utils/helpers.js';
 import { create_room } from '../utils/validators.js';
-import { handleCreateGameRequest } from '@/src/modules/game.js';
+import { handleCreateGameRequest } from '../modules/game.js';
 
 const router = Router();
 

@@ -9,9 +9,10 @@ class PGClient {
       password = process.env.PG_PASSWORD || 'postgres',
       host = process.env.PG_HOST || 'localhost',
       port = process.env.PG_PORT || 5432,
+      database = process.env.PG_DATABASE || 'simple_viral_games',
     } = options;
 
-    this.pool = new Pool({user, password, host, port});
+    this.pool = new Pool({user, password, host, port, database});
     this.is_connected = false;
   }
 

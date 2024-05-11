@@ -13,3 +13,11 @@ export function init({ body, schema }) {
   }));
   return { data, errors };
 }
+
+export const QUERIES = {
+  insert_game: `          
+          INSERT INTO game (name, url, published_date, author)
+          VALUES ($1, $2, $3, $4)
+          RETURNING id;
+          `
+}

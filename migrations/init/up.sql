@@ -16,3 +16,18 @@ CREATE TABLE IF NOT EXISTS game (
 CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_game_name_url_is_deleted ON game(name, url, is_deleted) WHERE is_deleted = FALSE;
 
 CREATE INDEX IF NOT EXISTS idx_game_id_is_deleted ON game (id, is_deleted);
+
+PREPARE insert_game (VARCHAR, VARCHAR, DATE, VARCHAR) AS
+    INSERT INTO game (name, url, published_date, author) VALUES ($1, $2, $3, $4);
+
+PREPARE select_game_by_id (INTEGER) AS
+    SELECT * FROM game WHERE id = $1;
+
+PREPARE select_all_games AS
+    SELECT * FROM game;
+
+PREPARE update_game_by_id (INTEGER, VARCHAR, VARCHAR, DATE, VARCHAR) AS
+    UPDATE game SET name = $2, url = $3, published_date = $4, author = $5 WHERE id = $1;
+
+PREPARE delete_game_by_id (INTEGER) AS
+    DELETE FROM game WHERE id = $1;
