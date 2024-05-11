@@ -21,13 +21,14 @@ PREPARE insert_game (VARCHAR, VARCHAR, DATE, VARCHAR) AS
     INSERT INTO game (name, url, published_date, author) VALUES ($1, $2, $3, $4);
 
 PREPARE select_game_by_id (INTEGER) AS
-    SELECT id, name, url, published_date, author FROM game WHERE id = $1;
+    SELECT id, name, url, published_date, author FROM game WHERE id = $1 and is_deleted = false;
 
 PREPARE select_all_games AS
-    SELECT id, name, url, published_date, author FROM game;
+    SELECT id, name, url, published_date, author FROM game WHERE is_deleted = false;
 
 PREPARE update_game_by_id (INTEGER, VARCHAR, VARCHAR, DATE, VARCHAR) AS
-    UPDATE game SET name = $2, url = $3, published_date = $4, author = $5 WHERE id = $1;
+    UPDATE game SET name = $2, url = $3, published_date = $4, author = $5, updated_at = CURRENT_TIMESTAMP
+    WHERE id = $1 and is_deleted = false;
 
 PREPARE delete_game_by_id (INTEGER) AS
-    DELETE FROM game WHERE id = $1;
+    UPDATE game SET is_deleted = true, updated_at = CURRENT_TIMESTAMP WHERE id = $1 and is_deleted = false;

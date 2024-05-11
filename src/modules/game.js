@@ -62,3 +62,26 @@ export async function fetchSingleGameDetail({ id }){
     await client.end();
   }
 }
+
+export async function updateGameDetails({ update_details, game_identifier }){
+  console.log(update_details, game_identifier);
+  try {
+    const game_details = await client.query(
+      {
+        name: 'update_game_by_id',
+        text: QUERIES.update_game_by_id,
+        values: [game_identifier.id, update_details.name, update_details.url, update_details.published_date, update_details.author],
+      }
+    );
+    if(game_details.rowCount === 0) throw new Error('Game not found');
+    return {
+      success: true,
+      data: {
+        ...update_details,
+      },
+      error_message: null,
+    };
+  } finally {
+    await client.end();
+  }
+}

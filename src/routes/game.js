@@ -1,14 +1,19 @@
 import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { init } from '../utils/helpers.js';
-import { create_room, fetch_single_game } from '../utils/validators.js';
-import { fetchAllGameDetail, fetchSingleGameDetail, handleCreateGameRequest } from '../modules/game.js';
+import { insert_body_validator, param_validator } from '../utils/validators.js';
+import {
+  fetchAllGameDetail,
+  fetchSingleGameDetail,
+  handleCreateGameRequest,
+  updateGameDetails,
+} from '../modules/game.js';
 
 const router = Router();
 
 router.post('/', async (req, res) => {
   try {
-    const { data, errors } = init({ body: req.body, schema: create_room });
+    const { data, errors } = init({ body: req.body, schema: insert_body_validator });
     if (errors.length) return res.status(StatusCodes.BAD_REQUEST).json(errors);
     const result = await handleCreateGameRequest(data);
     return res.status(StatusCodes.OK).json(result);
@@ -38,7 +43,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const { data, errors } = init({ body: req.params, schema: fetch_single_game });
+    const { data, errors } = init({ body: req.params, schema: param_validator });
     if (errors.length) return res.status(StatusCodes.BAD_REQUEST).json(errors);
     const result = await fetchSingleGameDetail(data);
     return res.status(StatusCodes.OK).json(result);
@@ -53,6 +58,23 @@ router.get('/:id', async (req, res) => {
         published_date: null,
         author: null,
       },
+      error_message: `${err?.message}`,
+    });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const { data: game_identifier, errors: param_errors } = init({ body: req.params, schema: param_validator });
+    const { data: update_details, errors: body_errors } = init({ body: req.body, schema: insert_body_validator });
+    if(param_errors?.length || body_errors?.length) return res.status(StatusCodes.BAD_REQUEST).json(param_errors || body_errors);
+    const result = await updateGameDetails({ update_details, game_identifier });
+    return res.status(StatusCodes.OK).json(result);
+  } catch (err) {
+    console.error(err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      data: { game_id: req.params.id, ...req.body},
       error_message: `${err?.message}`,
     });
   }
