@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { init } from '../utils/helpers.js';
 import { insert_body_validator, param_validator } from '../utils/validators.js';
 import {
+  deleteGameDetails,
   fetchAllGameDetail,
   fetchSingleGameDetail,
   handleCreateGameRequest,
@@ -75,6 +76,22 @@ router.put('/:id', async (req, res) => {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       data: { game_id: req.params.id, ...req.body},
+      error_message: `${err?.message}`,
+    });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const { data, errors } = init({ body: req.params, schema: param_validator });
+    if (errors.length) return res.status(StatusCodes.BAD_REQUEST).json(errors);
+    const result = await deleteGameDetails(data);
+    return res.status(StatusCodes.OK).json(result);
+  } catch (err) {
+    console.error(err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      data: { game_id: req.params.id },
       error_message: `${err?.message}`,
     });
   }

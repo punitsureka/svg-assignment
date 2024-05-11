@@ -64,7 +64,6 @@ export async function fetchSingleGameDetail({ id }){
 }
 
 export async function updateGameDetails({ update_details, game_identifier }){
-  console.log(update_details, game_identifier);
   try {
     const game_details = await client.query(
       {
@@ -78,6 +77,28 @@ export async function updateGameDetails({ update_details, game_identifier }){
       success: true,
       data: {
         ...update_details,
+      },
+      error_message: null,
+    };
+  } finally {
+    await client.end();
+  }
+}
+
+export async function deleteGameDetails({ id }){
+  try {
+    const game_details = await client.query(
+      {
+        name: 'delete_game_by_id',
+        text: QUERIES.delete_game_by_id,
+        values: [id],
+      }
+    );
+    if(game_details.rowCount === 0) throw new Error('Game not found');
+    return {
+      success: true,
+      data: {
+        game_id: id,
       },
       error_message: null,
     };
