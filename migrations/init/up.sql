@@ -21,10 +21,10 @@ PREPARE insert_game (VARCHAR, VARCHAR, DATE, VARCHAR) AS
     INSERT INTO game (name, url, published_date, author) VALUES ($1, $2, $3, $4);
 
 PREPARE select_game_by_id (INTEGER) AS
-    SELECT * FROM game WHERE id = $1;
+    SELECT id, name, url, published_date, author FROM game WHERE id = $1;
 
 PREPARE select_all_games AS
-    SELECT name, url, published_date, author FROM game;
+    SELECT id, name, url, published_date, author FROM game;
 
 PREPARE update_game_by_id (INTEGER, VARCHAR, VARCHAR, DATE, VARCHAR) AS
     UPDATE game SET name = $2, url = $3, published_date = $4, author = $5 WHERE id = $1;

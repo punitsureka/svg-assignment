@@ -20,5 +20,6 @@ export const QUERIES = {
           VALUES ($1, $2, $3, $4)
           RETURNING id;
           `,
-  select_all_games: `SELECT name, url, published_date, author FROM game;`
+  select_all_games: `SELECT id, name, url, published_date, author FROM game;`,
+  select_game_by_id: `SELECT id, name, url, published_date, author FROM game WHERE id = $1;`
 }

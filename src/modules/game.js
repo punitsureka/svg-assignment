@@ -42,3 +42,23 @@ export async function fetchAllGameDetail(){
     await client.end();
   }
 }
+
+export async function fetchSingleGameDetail({ id }){
+  try {
+    const game_details = await client.query(
+      {
+        name: 'select_game_by_id',
+        text: QUERIES.select_game_by_id,
+        values: [id],
+      }
+      );
+    if(game_details.rowCount === 0) throw new Error('Game not found');
+    return {
+      success: true,
+      data: game_details.rows[0],
+      error_message: null,
+    };
+  } finally {
+    await client.end();
+  }
+}
