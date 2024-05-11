@@ -24,3 +24,21 @@ export async function handleCreateGameRequest(game) {
     await client.end();
   }
 }
+
+export async function fetchAllGameDetail(){
+  try {
+    const game_details = await client.query(
+      {
+        name: 'select_all_games',
+        text: QUERIES.select_all_games,
+      }
+      );
+    return {
+      success: true,
+      data: game_details.rows,
+      error_message: null,
+    };
+  } finally {
+    await client.end();
+  }
+}

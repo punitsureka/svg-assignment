@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { init } from '../utils/helpers.js';
 import { create_room } from '../utils/validators.js';
-import { handleCreateGameRequest } from '../modules/game.js';
+import { fetchAllGameDetail, handleCreateGameRequest } from '../modules/game.js';
 
 const router = Router();
 
@@ -21,5 +21,20 @@ router.post('/', async (req, res) => {
     });
   }
 });
+
+router.get('/', async (req, res) => {
+  try {
+    const result = await fetchAllGameDetail();
+    return res.status(StatusCodes.OK).json(result);
+  } catch (err) {
+    console.error(err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      data: [],
+      error_message: `${err?.message}`,
+      success: false,
+    });
+  }
+});
+
 
 export default router;

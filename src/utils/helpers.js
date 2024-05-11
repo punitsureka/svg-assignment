@@ -19,5 +19,6 @@ export const QUERIES = {
           INSERT INTO game (name, url, published_date, author)
           VALUES ($1, $2, $3, $4)
           RETURNING id;
-          `
+          `,
+  select_all_games: `SELECT name, url, published_date, author FROM game;`
 }

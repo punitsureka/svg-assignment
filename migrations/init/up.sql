@@ -24,7 +24,7 @@ PREPARE select_game_by_id (INTEGER) AS
     SELECT * FROM game WHERE id = $1;
 
 PREPARE select_all_games AS
-    SELECT * FROM game;
+    SELECT name, url, published_date, author FROM game;
 
 PREPARE update_game_by_id (INTEGER, VARCHAR, VARCHAR, DATE, VARCHAR) AS
     UPDATE game SET name = $2, url = $3, published_date = $4, author = $5 WHERE id = $1;
