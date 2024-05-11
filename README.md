@@ -29,5 +29,8 @@ erDiagram
 	
 ```
 
+### API Testing
+- [CURLs](curl.md)
+
 ## Author
 * [Punit Sureka](https://www.linkedin.com/in/punitsureka/)
